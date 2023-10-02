@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 
 posts = [
     {
@@ -52,8 +53,14 @@ def index(request):
 
 def post_detail(request, pk):
     template = 'blog/detail.html'
-    context = {'post': posts[pk]}
-    return render(request, template, context)
+    html_content = '''
+    <h1>IndexError</h1>
+    '''
+    try:
+        context = {'post': posts[pk]}
+        return render(request, template, context)
+    except IndexError:
+        return HttpResponse(html_content)
 
 
 def category_posts(request, category_slug):
@@ -65,4 +72,3 @@ def category_posts(request, category_slug):
     context = {'category': category_slug,
                'category_posts': category_posts}
     return render(request, template, context)
-# Create your views here.
